@@ -1,4 +1,4 @@
-# sails-jbc
+# jbc-refact
 
 a [Sails v1](https://sailsjs.com) application
 
