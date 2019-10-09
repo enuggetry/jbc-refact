@@ -28,11 +28,8 @@
  * 
  */
 
-const Promise = require("bluebird");
 const fs = Promise.promisifyAll(require("fs"));
 const path = require('path');
-const deferred = require('deferred');
-const deepmerge = require('deepmerge');
 const _ = require('lodash');
 
 module.exports = {
