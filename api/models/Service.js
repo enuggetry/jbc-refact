@@ -40,8 +40,7 @@ var Service = {
       },
       type: {
           type: 'string',
-          enum: ['service', 'workflow'],
-          defaultsTo: 'service',
+          //enum: ['service', 'workflow'],
           required: true
       },
       // this is the origin of the service,  it can be the installable hook name (i.e. 'jblast')

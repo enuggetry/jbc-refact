@@ -24,16 +24,17 @@ module.exports = {
 
     attributes: {
         name: {
-            type: 'string',
+            type: 'string'
         }, 
         path: {
             type: 'string',
-            unique: true
-        },
-        tracks: {
-            collection: 'track',
-            via: 'id'
+            unique: true,
+			required: true
         }
+        //track: {
+        //    collection: 'track',
+        //    via: 'lkey'
+        //}
     },
     /*
      * cached assoc array of datasets {path:"sample_data/json/volvox", id:1}

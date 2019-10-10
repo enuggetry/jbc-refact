@@ -33,7 +33,8 @@ module.exports.datastores = {
   ***************************************************************************/
 
   default: {
-
+	adapter: 'sails-disk',
+	dir: 'data/'
     /***************************************************************************
     *                                                                          *
     * Want to use a different database during development?                     *

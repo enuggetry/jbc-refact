@@ -28,7 +28,8 @@
  * 
  */
 
-const fs = Promise.promisifyAll(require("fs"));
+//const fs = Promise.promisifyAll(require("fs"));
+const fs = require('fs-extra');
 const path = require('path');
 const _ = require('lodash');
 

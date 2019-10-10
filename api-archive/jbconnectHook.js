@@ -41,7 +41,7 @@ module.exports = function (sails) {
             //JbUtils.testFunction("called from jbcore.configure()");
         },
         initialize: function(cb) {
-            sails.log("Hook: jbcore initialize"); 
+            sails.log("Hook: jbconnectHook initialize"); 
 
             sails.exiting = false;
 

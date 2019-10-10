@@ -91,10 +91,10 @@ module.exports = {
 
     attributes: {
         id: {
-            type: 'integer',
+            type: 'number',
             autoIncrement: false,
-            unique: true,
-            primaryKey: true
+			required: true,
+            unique: true
         }
     },
     
