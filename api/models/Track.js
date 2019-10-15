@@ -39,7 +39,7 @@ module.exports = {
         dataset: {
             model: 'dataset',
             required: true,
-            via: 'path'
+            unique:true
         },
         path: {
             type: 'string',

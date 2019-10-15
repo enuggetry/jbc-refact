@@ -31,10 +31,6 @@ module.exports = {
             unique: true,
 			required: true
         }
-        //track: {
-        //    collection: 'track',
-        //    via: 'lkey'
-        //}
     },
     /*
      * cached assoc array of datasets {path:"sample_data/json/volvox", id:1}
