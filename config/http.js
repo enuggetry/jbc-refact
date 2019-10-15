@@ -11,6 +11,22 @@
  * https://sailsjs.com/config/http
  */
 
+const kue = require('kue');
+const kue_ui = require('kue-ui');
+
+const apiroute = '/api';
+const kueroute = '/kue';
+const apiregex = new RegExp('^' + apiroute + '(/|$)');
+const kueregex = new RegExp('^' + kueroute + '(/|$)');
+
+kue.createQueue();
+kue_ui.setup({
+  apiURL: '/api', // IMPORTANT: specify the api url
+  baseURL: '/kue' // IMPORTANT: specify the base url
+  //updateInterval: 5000 // Optional: Fetches new data every 5000 ms
+});
+
+
 module.exports.http = {
 
   /****************************************************************************
@@ -36,6 +52,7 @@ module.exports.http = {
       'cookieParser',
       'session',
       'jbrowse',
+      'kue',
       'compress',
       'poweredBy',
       'router',
@@ -58,14 +75,28 @@ module.exports.http = {
     //   return middlewareFn;
     // })(),
 	
-	jbrowse: (function _jbrowse() {
-		console.log('middleware jbrowse');
-		var express = require('express');
-		var jbrowsePath = '/home/ericiam/jb1165/';
-		return express.static(jbrowsePath); 
-	})(),
-	
+    jbrowse: (function _jbrowse() {
+      console.log('middleware jbrowse');
+      var express = require('express');
+      var jbrowsePath = '/home/ericiam/jb1166/';
+      return express.static(jbrowsePath); 
+    })(),
+    
+    kue: function (req, res, next) {
 
+      if (req.url.match(apiregex)) {
+        console.log('kue',req.method,req.url);
+        req.url = req.url.replace(apiregex, '/');
+        return kue.app(req,res);
+      }
+      if (req.url.match(kueregex)) {
+        console.log('kue_ui',req.method,req.url);
+        req.url = req.url.replace(kueregex, '/');
+        return kue_ui.app(req,res);
+      }
+
+      return next();
+    }
   },
 
 };
