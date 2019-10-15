@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable no-trailing-spaces */
 /**
  * HTTP Server Settings
  * (sails.config.http)
