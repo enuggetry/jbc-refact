@@ -38,7 +38,7 @@ var g = {
         
         // job service registration
         services: {
-            'nothingBurgerService': {name: 'nothingBurgerService',  type: 'service'}
+            //'nothingBurgerService': {name: 'nothingBurgerService',  type: 'service'}
         },
         
         /*
