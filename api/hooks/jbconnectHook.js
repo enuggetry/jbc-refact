@@ -49,22 +49,40 @@ module.exports = function (sails) {
             //sails.on('lifted', function() {
 
                 setTimeout(function() {
-                    Service.Init({},function() {
+                    let failed = false;
 
-                        Dataset.Init({},function(){
-                            Track.Init({}, function() {
-                                
+                    Service.Init({},function(err) {
+                        if (err) {
+                            failed++;
+                            return cb(err);
+                        }
+
+                        Dataset.Init({},function(err){
+                            if (err) {
+                                failed++;
+                                return cb(err);
+                            }
+                            Track.Init({}, function(err) {
+                                if (err) {
+                                    failed++;
+                                    return cb(err);
+                                }
                             });
                         });
-                        Job.Init({},function() {
-                            //sails.log("Job.start done");
-                            //return cb();
+                        Job.Init({},function(err) {
+                            if (err) {
+                                failed++;
+                                return cb(err);
+                            }
                         });
 
                     });
+                    setTimeout(function() {
+                        if (!failed) return cb();
+                    },1000);
                 },1000);
 
-                return cb();
+            
                 
             });
             
