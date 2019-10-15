@@ -55,13 +55,17 @@ module.exports = {
      * 
      */
     init: function(params, cb2) {
-        //sails.log.debug(">>> Service.init()");
+        sails.log.info("Service init");
         var thisb = this;
-        //var cb2 = cb;
+
+        if (! sails.config.globals.jbrowse) return cb2('jbrowse section not defined in globals');
+        if (! sails.config.globals.services) return cb2('services section not defined in globals');
+        
+        let g = sails.config.globals.jbrowse;
+        let services = g.services;      // services defined in global.js, including hooks.
         
         Service.find({},function(err,foundServices) {
-            var g = sails.config.globals.jbrowse;
-            var services = g.services;      // services defined in global.js, including hooks.
+
 
             //sails.log("services found: ");
             //for(var i in services) sails.log("service",services[i].name);

@@ -105,7 +105,11 @@ module.exports = {
      * @param (function) cb - callback function
      */
     Sync(cb) {
-        sails.log.debug('Dataset.Sync()');
+        sails.log.info('Dataset sync');
+
+        if (! sails.config.globals.jbrowse) return cb('jbrowse section not defined in globals');
+        if (! sails.config.globals.dataSet) return cb('dataSet section not defined in globals');
+
         var g = sails.config.globals.jbrowse;
         var thisb = this;
 

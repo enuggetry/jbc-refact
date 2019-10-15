@@ -109,6 +109,8 @@ module.exports = {
      */
     Init: function(params,cb) {
         sails.log.info('Job Engine Starting');
+        if (! sails.config.globals.jbrowse) return cb('jbrowse section not defined in globals');
+
         var g = sails.config.globals.jbrowse;
         var thisb = this;
         

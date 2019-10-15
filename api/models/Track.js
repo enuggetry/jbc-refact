@@ -373,6 +373,8 @@ module.exports = {
      */
     
     Sync: function(dataset,cb) {
+        if (! sails.config.globals.jbrowse) return cb('jbrowse section not defined in globals');
+
         var g = sails.config.globals.jbrowse;
 
         let ds = Dataset.Resolve(dataset);
