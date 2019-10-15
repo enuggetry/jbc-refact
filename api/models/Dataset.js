@@ -1,3 +1,5 @@
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable indent */
 /**
  * @module
  * @description
@@ -85,11 +87,11 @@ module.exports = {
      *         path: "sample_data/json/volvox",
      *         id: 3
      *     }
-     *     
+     *
      * @returns {object} - dataset object
      *      dataset (string - i.e. "sample_data/json/volvox" if input was an id
      *      returns null if not found
-     *      
+     *
      */
     Resolve(dval){
         if (typeof this._dataSets[dval] !== 'undefined')

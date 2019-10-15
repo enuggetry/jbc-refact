@@ -1,19 +1,20 @@
-/** 
+/* eslint-disable indent */
+/**
  * @module
  * @description 
- * 
+ *
  * The service module implements the job service frameowrk which are installable 
  * modules that can host web services and be a job execution processing for a particular
  * type of job.
- * 
+ *
  * Installable services are generally named <servicename>Service.js and reside in the
  * api/services directory.  For example: a job service built into this project is 
  * serverSearchService.js
- * 
+ *
  * `api/services/serviceProc.js` is the bettr part of the implementation of service
- * 
+ *
  * Job services are defined in `config/globals.js` in the jbrowse/services section.
- * 
+ *
  * Example job service object:
  * ::
  *   {
@@ -24,13 +25,13 @@
  *     "updatedAt": "2018-02-07T07:59:31.430Z",
  *     "id": 1
  *   }
- * 
+ *
  */
 
 var Service = {
     // Enforce model schema in the case of schemaless databases
     schema: false,
-    
+
     attributes: {
 
       name: {
@@ -49,16 +50,15 @@ var Service = {
           required: true
       }
     },
-    
-    
+
     Init: serviceProc.init,
-    
+
     /**
      * Get list of tracks based on critera in params
-     *   
+     *
      * @param {object} params - search critera (i.e. ``{id: 1,user:'jimmy'}`` )
      * @param {function} cb - callback ``function(err,array)``
-     * 
+     *
      */
     Get: function(params,cb) {
         this.find(params).then(function(foundList) {
@@ -69,7 +69,7 @@ var Service = {
     },
     /**
      * add service
-     * 
+     *
      * @param {object} service
      * ::
      *  {
@@ -79,20 +79,20 @@ var Service = {
      *      alias: optional
      *      handler: - a function pointer to the service handler
      *  }
-     *  
+     *
      * @param {object} cb - callback function
-     * 
+     *
      */
     Add: serviceProc.addService,
     /**
      * generic job service validation
-     * 
+     *
      * @param {string} serviceStr - service name
      * @returns {value}
-     * 
+     *
      * * return 0 if it is a valid job service (that uses the job queue)
      * * return non-zero if it is not
-     * 
+     *
      */
     ValidateJobService: function(serviceStr) {
         var serviceFunc = this.Resolve(serviceStr);
@@ -105,12 +105,12 @@ var Service = {
     },
     /*
      * Given the service name, return the service object.
-     * 
+     *
      * @param {string} serviceName - service name
      * @returns {value}
-     * 
+     *
      * * 0, if not defined
-     * 
+     *
      */
     Resolve: function(serviceName) {
         var svc = serviceProc.services[serviceName];

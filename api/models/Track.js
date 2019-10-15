@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /**
  * @module
  * @description
@@ -408,7 +409,7 @@ module.exports = {
                 for(var i in mTracks) console.log("mtracks",c++,i, mTracks[i].id);
 
                 deleteModelItems(mTracks,fTracks);
-                addOrUpdateItemsToModel(mTracks,fTracks);            
+                addOrUpdateItemsToModel(mTracks,fTracks);
             })    
             .catch(function(err) {
                 // istanbul ignore next

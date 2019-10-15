@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /**
  * @module
  * @description
@@ -8,7 +9,7 @@
  * Subscribers to the record (clients) will get notification.
  * JBClient plugin uses this to determine if a job is active and changes the activity icon
  * of the job queue panel.
- * 
+ *
  * JobActive object example:
  * ::
  *   {
@@ -56,13 +57,13 @@ module.exports = {
         var g = sails.config.globals;
         var thisb = this;
         var queue = g.kue_queue;
-        
+
         queue.activeCount(Job._queueName, function( err, total ) {
             console.log("active count",total);
             thisb._lastActiveCount = total;
             writeActive(total);
         });
-        
+
         let t1 = setInterval(function() {
             /* istanbul ignore next */
             if (sails.exiting) {
