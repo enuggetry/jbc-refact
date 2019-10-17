@@ -1,3 +1,5 @@
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable indent */
 /**
  * @module
  * @description 
