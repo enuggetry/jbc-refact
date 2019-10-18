@@ -11,21 +11,10 @@
  * https://sailsjs.com/config/http
  */
 
-const kue = require('kue');
-const kue_ui = require('kue-ui');
-
 const apiroute = '/api';
 const kueroute = '/kue';
 const apiregex = new RegExp('^' + apiroute + '(/|$)');
 const kueregex = new RegExp('^' + kueroute + '(/|$)');
-
-kue.createQueue();
-kue_ui.setup({
-  apiURL: '/api', // IMPORTANT: specify the api url
-  baseURL: '/kue' // IMPORTANT: specify the base url
-  //updateInterval: 5000 // Optional: Fetches new data every 5000 ms
-});
-
 
 module.exports.http = {
 
@@ -81,8 +70,10 @@ module.exports.http = {
       var jbrowsePath = '/home/ericiam/jb1166/';
       return express.static(jbrowsePath); 
     })(),
-    
+
     kue: function (req, res, next) {
+      let kue = sails.config.globals.kue;
+      let kue_ui = sails.config.globals.kue_ui;
 
       if (req.url.match(apiregex)) {
         console.log('kue',req.method,req.url);

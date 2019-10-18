@@ -108,4 +108,14 @@ if (jblib && jblib.mergeConfigJs) {
   g = jblib.mergeConfigJs(g);
 }
 
+g.kue = require('kue');
+g.kue_ui = require('kue-ui');
+g.kue_queue = g.kue.createQueue();
+
+g.kue_ui.setup({
+  apiURL: '/api', // IMPORTANT: specify the api url
+  baseURL: '/kue' // IMPORTANT: specify the base url
+  //updateInterval: 5000 // Optional: Fetches new data every 5000 ms
+});
+
 module.exports.globals = g;
