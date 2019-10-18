@@ -109,7 +109,16 @@ module.exports = {
     /**
      * start the monitor
      */
-    Init: function(params,cb) {
+    Init: async function(params) {
+        let thisb = this;
+        let promise = new Promise((resolve, reject) => {
+            thisb.Init1(params,(err) => {
+                if (err) reject(new Error(err));
+                else resolve();
+            });
+        });
+    },
+    Init1: function(params,cb) {
         sails.log.info('Job Engine Starting');
         if (! sails.config.globals.jbrowse) return cb('jbrowse section not defined in globals');
 
@@ -125,44 +134,9 @@ module.exports = {
             thisb._syncJobs();
             thisb._jobRunner();
             JobActive.Init(null,function() {});
-            //_debugPushEvents();
-            //_debug1();
         },1000);
         
-        // display methods in Job
-        // istanbul ignore next
-        function _debug1() {
-            var fs = require('fs-extra');
-            console.log("debug1 - listing JobActive functions");
-            var li = Object.getOwnPropertyNames(JobActive).filter(function (p) {
-                return typeof JobActive[p] === 'function';
-            });
-            var li2 = "";
-            for(var i in li) li2 += li[i]+'\n';
-            fs.writeFileSync("Job-Methods.log",li2);
-        }
-        // istanbul ignore next
-        function _testdelete(job) {
-            sails.log('deleteing job',job.id);
-            job.remove(function(err){
-              if (err) throw err;
-              console.log('removed completed job #%d', job.id);
-            });            
-        }
-        // istanbul ignore next
-        function _debugPushEvents() {
-            var t1 = setInterval(function() {
-                if (sails.exiting) {
-                    console.log("clear interval _debugPushEvents()");
-                    clearInterval(t1);
-                }
-                
-                console.log('_eventProc',thisb._eventProc,thisb._eventList.length);
-            }, 3000);
-        }
-        
         cb();
-
     },
     /**
      * Get list of tracks based on critera in params
@@ -422,7 +396,7 @@ module.exports = {
             
             Job.create(job1).then(function(created) {
                sails.log("sJob created",created.id); 
-               Job.publishCreate(created);       // announce create
+               Job.publish(created);       //todo: announce create
                cb();
 
             }).catch(function(err) {
@@ -486,7 +460,7 @@ module.exports = {
             else {
                 Job.update({id:r.sJob.id},diff).then(function(updated) {
                    //sails.log("_updateJob sJob updated",updated[0].id,updated[0]); 
-                   Job.publishUpdate(0,updated[0]);       // announce update
+                   Job.publish(0,updated[0]);       //todo: announce update
                    return cbx();
 
                 }).catch(function(err) {
@@ -505,7 +479,7 @@ module.exports = {
         
         Job.destroy(id).then(function(destroyed) {
             sails.log("_destoryJob sJob destroyed",id);
-            Job.publishDestroy(id);       // announce destroy
+            Job.publish(id);       //todo: announce destroy
             return cb();
 
         }).catch(function(err) {
@@ -624,7 +598,7 @@ module.exports = {
                     Job.create(job1).then(function(created) {
                        sails.log("copyjob sJob created",job.id);
                        sJobs[i] = created;
-                       //Job.publishCreate(created);                  // announce create
+                       //Job.publish(created);                  //todo: announce create
                        cb(null);
                     }).catch(function(err) {
                         // istanbul ignore next
@@ -642,7 +616,7 @@ module.exports = {
                             sails.log("destroying sJob", i);
                             Job.destroy({id: sJobs[i].id}).then(function() {
                                 sails.log("deleted sJob");
-                                //Job.publishDestroy(destroyed.id);       // announce destroy
+                                //Job.publish(destroyed.id);       //todo: announce destroy
                             }).catch(function(err) {
                                 // istanbul ignore next
                                 sails.log.error("failed to delete from sJob",i,err);

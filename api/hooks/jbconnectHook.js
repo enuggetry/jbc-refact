@@ -55,6 +55,7 @@ module.exports = function (sails) {
 
                 await sleep(1000);
                 await Service.Init();
+                await Job.Init();
 
                 //setTimeout(function() {
                 //    let failed = false;
@@ -93,7 +94,7 @@ module.exports = function (sails) {
                 //},1000);
 
             
-                
+                console.log("done initialize");
             });
             
             //return cb();

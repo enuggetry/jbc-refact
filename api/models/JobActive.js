@@ -86,7 +86,7 @@ module.exports = {
         function writeActive(val) {
             JobActive.updateOrCreate({id:1},{active:val}).then(function(record) {
                 //sails.log('active written',record);
-                JobActive.publishUpdate(1,record);
+                JobActive.publish(1,record);    //todo: 
             })
             .catch(
             /* istanbul ignore next */
