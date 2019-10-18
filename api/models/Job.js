@@ -112,13 +112,13 @@ module.exports = {
     Init: async function(params) {
         let thisb = this;
         let promise = new Promise((resolve, reject) => {
-            thisb.Init1(params,(err) => {
+            thisb._init(params,(err) => {
                 if (err) reject(new Error(err));
                 else resolve();
             });
         });
     },
-    Init1: function(params,cb) {
+    _init: function(params,cb) {
         sails.log.info('Job Engine Starting');
         if (! sails.config.globals.jbrowse) return cb('jbrowse section not defined in globals');
 
