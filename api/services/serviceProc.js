@@ -108,7 +108,7 @@ module.exports = {
                     // istanbul ignore next
                     if (err) {
                         sails.log("Services init failed:",err);
-                        return cb2();
+                        return cb2('Services init failed');
                     }
                     //sails.log("Services init completed");
                     

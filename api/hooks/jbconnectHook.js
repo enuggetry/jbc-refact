@@ -1,3 +1,6 @@
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable indent */
 /**
  * @module hooks/jbcore
  * @description
@@ -32,25 +35,31 @@ module.exports = function (sails) {
     
     return {
 
-        configure: function() {
+        //configure: function() {
             //sails.log("jbcore configure");
             //if (typeof sails.config.globals.jbrowse !== 'undefined') sails.log("globals.jbrowse exist");
             //if (typeof sails.config.globals.jbhooks === 'undefined') sails.config.globals.jbhooks = [];
             //sails.config.globals.jbhooks.splice(0, 0, "jbcore");
             
             //JbUtils.testFunction("called from jbcore.configure()");
-        },
-        initialize: function(cb) {
+        //},
+        initialize: async function() {
             sails.log("Hook: jbconnectHook initialize"); 
 
+
+            const sleep = m => new Promise(r => setTimeout(r, m));
             sails.exiting = false;
 
-            sails.on('hook:orm:loaded', function() {
+            sails.on('hook:orm:loaded', async function() {
             //sails.on('lifted', function() {
 
-                setTimeout(function() {
-                    let failed = false;
+                await sleep(1000);
+                await Service.Init();
 
+                //setTimeout(function() {
+                //    let failed = false;
+                //    await Service.Init();
+/*
                     Service.Init({},function(err) {
                         if (err) {
                             failed++;
@@ -77,10 +86,11 @@ module.exports = function (sails) {
                         });
 
                     });
-                    setTimeout(function() {
-                        if (!failed) return cb();
-                    },1000);
-                },1000);
+*/
+                //    setTimeout(function() {
+                //        if (!failed) return cb();
+                //    },1000);
+                //},1000);
 
             
                 

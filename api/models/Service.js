@@ -51,7 +51,14 @@ var Service = {
       }
     },
 
-    Init: serviceProc.init,
+    Init: async function(params) {
+        let promise = new Promise((resolve, reject) => {
+            serviceProc.init(params,(err) => {
+                if (err) reject(new Error(err));
+                else resolve();
+            });
+        });
+    },
 
     /**
      * Get list of tracks based on critera in params
