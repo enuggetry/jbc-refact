@@ -56,42 +56,8 @@ module.exports = function (sails) {
                 await sleep(1000);
                 await Service.Init();
                 await Job.Init();
-
-                //setTimeout(function() {
-                //    let failed = false;
-                //    await Service.Init();
-/*
-                    Service.Init({},function(err) {
-                        if (err) {
-                            failed++;
-                            return cb(err);
-                        }
-
-                        Dataset.Init({},function(err){
-                            if (err) {
-                                failed++;
-                                return cb(err);
-                            }
-                            Track.Init({}, function(err) {
-                                if (err) {
-                                    failed++;
-                                    return cb(err);
-                                }
-                            });
-                        });
-                        Job.Init({},function(err) {
-                            if (err) {
-                                failed++;
-                                return cb(err);
-                            }
-                        });
-
-                    });
-*/
-                //    setTimeout(function() {
-                //        if (!failed) return cb();
-                //    },1000);
-                //},1000);
+                await Dataset.Init();
+                //await Track.Init();
 
             
                 console.log("done initialize");

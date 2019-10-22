@@ -99,6 +99,15 @@ module.exports = {
         sails.log.error('Dataset.Resolve not found (we shouldnt get here)',dval);
         return null;
     },
+    Init: async function(params) {
+        let thisb = this;
+        let promise = new Promise((resolve, reject) => {
+            thisb._sync(params,(err) => {
+                if (err) reject(new Error(err));
+                else resolve();
+            });
+        });
+    },
     /**
      * Sync datasets, defined in globals with database.
      * 
@@ -106,7 +115,7 @@ module.exports = {
      * 
      * @param (function) cb - callback function
      */
-    Sync(cb) {
+    _sync(cb) {
         sails.log.info('Dataset sync');
 
         if (! sails.config.globals.jbrowse) return cb('jbrowse section not defined in globals');
