@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /**
  * Datastores
  * (sails.config.datastores)
@@ -34,7 +35,8 @@ module.exports.datastores = {
 
   default: {
 	adapter: 'sails-disk',
-	dir: 'data/'
+  dir: 'data/'
+
     /***************************************************************************
     *                                                                          *
     * Want to use a different database during development?                     *
