@@ -35,16 +35,8 @@ module.exports = function (sails) {
     
     return {
 
-        //configure: function() {
-            //sails.log("jbcore configure");
-            //if (typeof sails.config.globals.jbrowse !== 'undefined') sails.log("globals.jbrowse exist");
-            //if (typeof sails.config.globals.jbhooks === 'undefined') sails.config.globals.jbhooks = [];
-            //sails.config.globals.jbhooks.splice(0, 0, "jbcore");
-            
-            //JbUtils.testFunction("called from jbcore.configure()");
-        //},
         initialize: async function() {
-            sails.log("Hook: jbconnectHook initialize"); 
+            sails.log('Initializing jbconnectHook'); 
 
 
             const sleep = m => new Promise(r => setTimeout(r, m));
@@ -53,14 +45,16 @@ module.exports = function (sails) {
             sails.on('hook:orm:loaded', async function() {
             //sails.on('lifted', function() {
 
-                await sleep(1000);
-                await Service.Init();
-                await Job.Init();
-                await Dataset.Init();
+                //sails.log(sails.config.http.middleware);
+
+                //await sleep(1000);
+                //await Service.Init();
+                //await Job.Init();
+                //await Dataset.Init();
                 //await Track.Init();
 
             
-                console.log("done initialize");
+                console.log("Done initializing jbconnectHook");
             });
             
             //return cb();
