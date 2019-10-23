@@ -40,8 +40,9 @@ module.exports.http = {
     order: [
       'cookieParser',
       'session',
-      'jbrowse',
-      'kue',
+//      'jbrowse',
+//      'kue',
+      'bodyParser',
       'compress',
       'poweredBy',
       'router',
@@ -63,14 +64,15 @@ module.exports.http = {
     //   var middlewareFn = skipper({ strict: true });
     //   return middlewareFn;
     // })(),
-	
+/*	
     jbrowse: (function _jbrowse() {
       console.log('middleware jbrowse');
       var express = require('express');
       var jbrowsePath = '/home/ericiam/jb1166/';
       return express.static(jbrowsePath); 
     })(),
-
+*/
+/*
     kue: function (req, res, next) {
       let kue = sails.config.globals.kue;
       let kue_ui = sails.config.globals.kue_ui;
@@ -88,6 +90,7 @@ module.exports.http = {
 
       return next();
     }
+*/
   },
 
 };
