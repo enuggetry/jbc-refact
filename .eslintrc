@@ -21,6 +21,8 @@
   // you would visit `http://eslint.org/docs/rules/no-sequences`.  If you're unsure
   // or could use some advice, come by https://sailsjs.com/support.
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  
+  "esversion":6,
 
   "env": {
     "node": true
@@ -37,9 +39,15 @@
     "Promise": true,
     "sails": true,
     "_": true,
+    "async": true,
 
     // Models:
-    "User": true
+    "User": true,
+    "Track": true,
+    "Dataset": true,
+    "Job": true,
+    "JobActive": true,
+    "Service": true
     
     // …and any others.
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
