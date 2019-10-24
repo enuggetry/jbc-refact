@@ -6,30 +6,13 @@
  * @description
  * publish globals in a well known location
  */
-var fs = require("fs-extra");
+const fs = require("fs-extra");
 
-//var kueJobMon = require('./kueJobMon');
+const apiroute = '/api';
+const kueroute = '/kue';
+const apiregex = new RegExp('^' + apiroute + '(/|$)');
+const kueregex = new RegExp('^' + kueroute + '(/|$)');
 
-
-/* 
- * launches redis however it must first be installed with 'yum install redis'
- */
-/*
-var RedisServer = require('redis-server');
-var redisPort = 6379;
-var redisServerInstance = new RedisServer(redisPort);
-
-
-redisServerInstance.open(function (error) {
- 
-  if (error) {
-    throw new Error(error);
-  }
-  
-  console.log('redis server, port '+redisPort);
- 
-});
-*/
 module.exports = function (sails) {
     var mySails = sails; 
     
@@ -42,10 +25,14 @@ module.exports = function (sails) {
             const sleep = m => new Promise(r => setTimeout(r, m));
             sails.exiting = false;
 
-            sails.on('hook:orm:loaded', async function() {
-            //sails.on('lifted', function() {
+            //sails.on('hook:orm:loaded', async function() {
+            //sails.on('lifted', async function() {
+            sails.on('ready', async function() {
 
-                //sails.log(sails.config.http.middleware);
+
+                // initialize data in sails.config.jbconnect
+                jbutillib.initJbconnectData();
+                jbutillib.initKue();
 
                 //await sleep(1000);
                 //await Service.Init();
@@ -81,38 +68,36 @@ module.exports = function (sails) {
                     }
                     res.send(hlist);
                     //return next();
-                }
+                },
+            },
+            after: {
+                /**
+                 * kue api - access with /api
+                 * 
+                 * @param {*} req 
+                 * @param {*} res 
+                 * @param {*} next 
+                 */
+                'get /api/*': function (req, res, next) {
+                    sails.log.debug(req.url);
+                    let kue = sails.config.kue.kue;
+                    req.url = req.url.replace(apiregex, '/');
+                    return kue.app(req,res,next);
+                },
+                /**
+                 * kue-ui - debugging interface for kue access with /kue
+                 * 
+                 * @param {*} req 
+                 * @param {*} res 
+                 * @param {*} next 
+                 */
+                'get /kue/*': function (req, res, next) {
+                    sails.log.debug(req.url);
+                    let kue_ui = sails.config.kue.ui;
+                    req.url = req.url.replace(kueregex, '/');
+                    return kue_ui.app(req,res,next);
+                }        
             }
-        },
-        /**
-         * 
-         */
-        /*
-        setGlobalSection: function(data,name,cb) {
-            return storeInSection(data,name,cb);
-        },
-        */
-        /*
-         * intercept res.send for debugging
-         * @param {type} res
-         * @param {type} data
-         * @returns {unresolved}
-         */
-        resSend(res,data) {
-            sails.log.debug("******** resSend",data);
-            return res.send(data);
-        },
-        /**
-         * 
-         * @param {type} eventName
-         * @param {type} data
-         * @returns {undefined}
-         */
-        sendEvent: function(eventName,data) {
-            //Test.message(1, {message:eventName,data:data});
-            //sails.log.debug("*** sendEvent: %s",eventName);
-            sails.sockets.blast(eventName, data);
         }
-    }
+    };
 };
-
