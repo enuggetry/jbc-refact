@@ -1,3 +1,5 @@
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable indent */
 /**
  * @module
  * @description 
@@ -85,9 +87,44 @@ module.exports = {
         
         return aggregate.jbrowse;
     },
+    initJbconnectData() {
+        sails.log.debug('Initialize JBConnect Data');
+
+        let config_js = approot+"/jbconnect.config.js";
+        if (fs.existsSync(config_js)) {
+            let conf = require(config_js);
+            sails.config.jbconnect = merge(sails.config.jbconnect,conf);
+        }
+
+        // initialize kue
+        sails.config.jbconnect.kue = require('kue');
+        sails.config.jbconnect.kue_ui = require('kue-ui');
+        sails.config.jbconnect.kue_queue = sails.config.jbconnect.kue.createQueue();
+        
+        sails.config.jbconnect.kue_ui.setup({
+          apiURL: '/api', // IMPORTANT: specify the api url
+          baseURL: '/kue' // IMPORTANT: specify the base url
+          //updateInterval: 5000 // Optional: Fetches new data every 5000 ms
+        });   
+
+    },
+    initKue() {
+        // initialize kue
+        sails.config.kue.kue = require('kue');
+        sails.config.kue.ui = require('kue-ui');
+        sails.config.kue.queue = sails.config.kue.kue.createQueue();
+        
+        sails.config.kue.ui.setup({
+          apiURL: '/api', // IMPORTANT: specify the api url
+          baseURL: '/kue' // IMPORTANT: specify the base url
+          //updateInterval: 5000 // Optional: Fetches new data every 5000 ms
+        });   
+
+    },
     /*
-     * returns the config, merged with the contents of jbconnect.config.js
+     * returns the config, merged with the contents of jbconnect.config.js (obsolete)
      */
+    /*
     mergeConfigJs(config) {
         // merge approot/jbconnect.config.js
         let config_js = approot+"/jbconnect.config.js";
@@ -97,6 +134,7 @@ module.exports = {
         }
         return config;
     },
+    */
     /**
      * @param {string} filter - (ie. ".css" or ".js")
      * @returns {Array} the aggregated client dependencies from webIncludes.
