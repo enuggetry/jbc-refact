@@ -13,7 +13,7 @@ const approot = require('app-root-path');
 const glob = require('glob');
 const sh = require('shelljs');
 const merge = require('deepmerge');
-const config = require(approot+'/config/globals.js').globals;
+const config = require(approot+'/config/jbconnect.js');
 //const util = require('./utilFn');
 const html2json = require('html2json').html2json;
 const json2html = require('html2json').json2html;
@@ -57,16 +57,14 @@ module.exports = {
         var merged = {};
 
         var scripts = glob.sync(approot+'/node_modules/*-jbconnect-hook');
-        //console.log('scripts',scripts);
 
         for(var i in scripts) {
             //console.log('script found - ',scripts[i]);
             var path = cwd+'/'+scripts[i];
-            var extScript = scripts[i]+'/config/globals.js';
+            var extScript = scripts[i]+'/config/jbconnect.js';
             //console.log("extScript",extScript);
             if (fs.existsSync(extScript)) { 
-              // do something 
-              var extConfig = require(extScript).globals;
+              var extConfig = require(extScript);
               //console.log('extConfig',extConfig);
               merged = merge(extConfig,merged);
             }
