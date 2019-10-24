@@ -1,3 +1,6 @@
+/* eslint-disable handle-callback-err */
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable prefer-arrow-callback */
 /* eslint-disable indent */
 /**
  * @module
@@ -43,7 +46,7 @@ module.exports = {
      */
     Get: function(params,cb) {
         this.find(params).then(function(foundList) {
-           return cb(null,foundList) 
+           return cb(null,foundList); 
         }).catch( /* istanbul ignore next */ function(err){
            return cb(err);
         });
@@ -54,9 +57,9 @@ module.exports = {
     _lastActiveCount: 0,
     _activeMonitor: function() {
         sails.log.info("Active Job Monitor starting");
-        var g = sails.config.globals;
+        var g = sails.config.kue;
         var thisb = this;
-        var queue = g.kue_queue;
+        var queue = g.queue;
 
         queue.activeCount(Job._queueName, function( err, total ) {
             console.log("active count",total);

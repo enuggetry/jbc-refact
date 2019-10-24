@@ -1,3 +1,5 @@
+/* eslint-disable handle-callback-err */
+/* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable indent */
 /**
@@ -120,9 +122,8 @@ module.exports = {
     },
     _init: function(params,cb) {
         sails.log.info('Job Engine Starting');
-        if (! sails.config.globals.jbrowse) return cb('jbrowse section not defined in globals');
 
-        var g = sails.config.globals.jbrowse;
+        var g = sails.config.jbconnect;
         var thisb = this;
         
         //this.monitor();
@@ -160,7 +161,7 @@ module.exports = {
      */
     Remove: function(params,cb) {
         let thisb = this;
-        let g = sails.config.globals.jbrowse;
+        let g = sails.config.jbconnect;
         if (_.isUndefined(params.id)) return cb("id not defined");
         let id = params.id;
 		
@@ -192,6 +193,7 @@ module.exports = {
         
         // validate the service
         var err = Service.ValidateJobService(params.service); 
+
         // istanbul ignore next
         if (err) {
             sails.log.error(err);
@@ -219,8 +221,7 @@ module.exports = {
 
         // create queue entry
         
-        var g = sails.config.globals;
-        var kJob = g.kue_queue.create(this._queueName, jobdata);
+        var kJob = sails.config.kue.queue.create(this._queueName, jobdata);
         
         kJob.save(function(err){
             // istanbul ignore next
@@ -238,8 +239,8 @@ module.exports = {
      */
     _jobRunner: function() {
         sails.log.info("Job Runner Started");
-        var gg = sails.config.globals;
-        var queue = gg.kue_queue;
+        var gg = sails.config.kue;
+        var queue = gg.queue;
         var thisb = this;
         
         let t1 = setInterval(function() {
@@ -283,39 +284,39 @@ module.exports = {
      * subscribe to kue events and translates them to sails events
      */
     _kueEventMonitor: function() {
-        var g = sails.config.globals;
+        var g = sails.config.kue;
         var thisB = this;
         sails.log.info("Kue Event Monitor started");
         
-        g.kue_queue.on('job enqueue', function(id, data){
+        g.queue.on('job enqueue', function(id, data){
           thisB._pushEvent('enqueue',id,data,'create');
           thisB._processNextEvent();
         });        
-        g.kue_queue.on('job start', function(id, data){
+        g.queue.on('job start', function(id, data){
           thisB._pushEvent('start',id,data,'update');
           thisB._processNextEvent();
         });        
-        g.kue_queue.on('job failed', function(id, data){
+        g.queue.on('job failed', function(id, data){
           thisB._pushEvent('failed',id,data,'update');
           thisB._processNextEvent();
         });        
-        g.kue_queue.on('job failed attempt', function(id, data){
+        g.queue.on('job failed attempt', function(id, data){
           thisB._pushEvent('failed-attempt',id,data,'update');
           thisB._processNextEvent();
         });        
-        g.kue_queue.on('job progress', function(id, data){
+        g.queue.on('job progress', function(id, data){
           thisB._pushEvent('progress',id,data,'update');
           thisB._processNextEvent();
         });        
-        g.kue_queue.on('job complete', function(id, data){
+        g.queue.on('job complete', function(id, data){
           thisB._pushEvent('complete',id,data,'update');
           thisB._processNextEvent();
         });        
-        g.kue_queue.on('job remove', function(id, data){
+        g.queue.on('job remove', function(id, data){
           thisB._pushEvent('remove',id,data,'remove');
           thisB._processNextEvent();
         });        
-        g.kue_queue.on('job promotion', function(id, data){
+        g.queue.on('job promotion', function(id, data){
           thisB._pushEvent('promotion',id,data,'update');
           thisB._processNextEvent();
         });        
@@ -377,7 +378,7 @@ module.exports = {
         }
     },
     _createJob: function(id,cb) {
-        var g = sails.config.globals;
+        var g = sails.config.kue;
         var thisB = this;
         
         g.kue.Job.get(id, function(err, kJob){
@@ -409,7 +410,7 @@ module.exports = {
         
     },
     _updateJob: function(id,cbx) {
-        var g = sails.config.globals;
+        var g = sails.config.kue;
         var thisB = this;
         
         async.parallel({
@@ -474,7 +475,7 @@ module.exports = {
         });
     },
     _destroyJob: function(id,cb) {
-        var g = sails.config.globals;
+        var g = sails.config.kue;
         var thisB = this;
         
         Job.destroy(id).then(function(destroyed) {
@@ -497,7 +498,7 @@ module.exports = {
      */
     // istanbul ignore next
     _listJobs() {
-        var g = sails.config.globals;
+        var g = sails.config.kue;
         
         // get kue jobs
         g.kue.Job.range( 0, 100000, 'asc', function( err, jobs ) {
@@ -523,7 +524,7 @@ module.exports = {
      * If the sJob exists but not kJob, then delete the sJob
      */
     _syncJobs: function() {
-        var g = sails.config.globals;
+        var g = sails.config.kue;
         var thisb = this;
 
         // ToDo: potential mem blowup if queue gets to big
@@ -555,8 +556,8 @@ module.exports = {
                 r.sJobs.forEach(function(job,i) { sJobs[job.id] = job;});
 
                 // display for debug
-                //for(var i in kJobs) console.log('+kJob',kJobs[i].id,i);
-                //for(var i in sJobs) console.log('-sJob',sJobs[i].id,i);
+                for(var i in kJobs) console.log('+kJob',kJobs[i].id,i);
+                for(var i in sJobs) console.log('-sJob',sJobs[i].id,i);
                 
                 // mark all sJobs deleted
                 for(var i in sJobs) sJobs[i].delete = true;
@@ -612,7 +613,7 @@ module.exports = {
                 // delete any sJobs with delete flag remaining
                 function destroyRemaining() {
                     for(var i in sJobs) {
-                        if (sJobs[i].delete) {
+                        if (sJobs[i] && sJobs[i].delete) {
                             sails.log("destroying sJob", i);
                             Job.destroy({id: sJobs[i].id}).then(function() {
                                 sails.log("deleted sJob");

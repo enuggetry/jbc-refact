@@ -36,7 +36,7 @@ module.exports = function (sails) {
 
                 await sleep(1000);
                 await Service.Init();
-                //await Job.Init();
+                await Job.Init();
                 //await Dataset.Init();
                 //await Track.Init();
 
