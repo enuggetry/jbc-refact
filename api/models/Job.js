@@ -556,8 +556,8 @@ module.exports = {
                 r.sJobs.forEach(function(job,i) { sJobs[job.id] = job;});
 
                 // display for debug
-                for(var i in kJobs) console.log('+kJob',kJobs[i].id,i);
-                for(var i in sJobs) console.log('-sJob',sJobs[i].id,i);
+                //for(var i in kJobs) console.log('+kJob',kJobs[i].id,i);
+                //for(var i in sJobs) console.log('-sJob',sJobs[i].id,i);
                 
                 // mark all sJobs deleted
                 for(var i in sJobs) sJobs[i].delete = true;
