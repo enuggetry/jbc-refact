@@ -27,13 +27,12 @@ module.exports = {
      */
     get: function(req,res) {
         var params = req.allParams();
-        sails.log("/dataset/get",params);
 
         /* istanbul ignore else */
         if (req.method === 'GET') {
             Dataset.Get(params,function(err,records) {
                 /* istanbul ignore next */
-                if (err) res.serverError(err);
+                if (err) return res.serverError(err);
                 /* istanbul ignore next */
                 if (records.length===0) return res.notFound();
                 

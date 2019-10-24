@@ -1,3 +1,5 @@
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable indent */
 /**
  * @module
  * @description
@@ -36,12 +38,11 @@ module.exports = {
      */
     get: function(req,res) {
         var params = req.allParams();
-        sails.log("/service/get",params);
         // istanbul ignore else
         if (req.method === 'GET') {
             Service.Get(params,function(err,records) {
                 // istanbul ignore if
-                if (err) res.serverError(err);
+                if (err) return res.serverError(err);
                 // istanbul ignore if
                 if (records.length===0) return res.notFound();
                 return res.ok(records);
