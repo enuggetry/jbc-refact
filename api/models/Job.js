@@ -92,7 +92,8 @@ const _ = require('lodash');
 const fetch = require('node-fetch');
 
 module.exports = {
-
+    schema:false,   // schemaless
+    
     attributes: {
         id: {
             type: 'number',

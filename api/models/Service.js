@@ -28,9 +28,9 @@
  *
  */
 
-var Service = {
-    // Enforce model schema in the case of schemaless databases
-    schema: false,
+module.exports = {
+    schema: false,              // schemaless
+    datastore: 'inMemoryDb',    // this model is not persistent
 
     attributes: {
 
@@ -126,6 +126,3 @@ var Service = {
     }
 
 };
-
-module.exports = Service;
-

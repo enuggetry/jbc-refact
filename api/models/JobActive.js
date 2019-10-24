@@ -25,7 +25,8 @@
 
 
 module.exports = {
-
+    schema: false,     // schemaless
+    
     /**
      * initialize starts the job active monitor
      * 
