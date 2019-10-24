@@ -1,4 +1,5 @@
 /* eslint-disable no-trailing-spaces */
+/* eslint-disable prefer-arrow-callback */
 /* eslint-disable indent */
 /**
  * @module

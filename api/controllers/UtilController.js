@@ -1,3 +1,11 @@
+/* eslint-disable quotes */
+/* eslint-disable handle-callback-err */
+/* eslint-disable linebreak-style */
+/* eslint-disable curly */
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable indent */
+
 /*
 Utility interfaces
 */
