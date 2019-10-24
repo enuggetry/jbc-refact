@@ -60,10 +60,9 @@ module.exports = {
         sails.log.info("Service init");
         var thisb = this;
 
-        if (! sails.config.globals.jbrowse) return cb2('jbrowse section not defined in globals');
-        if (! sails.config.globals.services) return cb2('services section not defined in globals');
+        if (! sails.config.jbconnect.services) return cb2('services section not defined in globals');
         
-        let g = sails.config.globals.jbrowse;
+        let g = sails.config.jbconnect;
         let services = g.services;      // services defined in global.js, including hooks.
         
         Service.find({},function(err,foundServices) {

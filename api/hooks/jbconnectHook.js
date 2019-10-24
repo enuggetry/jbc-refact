@@ -19,9 +19,9 @@ module.exports = function (sails) {
     return {
 
         initialize: async function() {
-            sails.log('Initializing jbconnectHook'); 
+            sails.log.info('Initializing jbconnectHook'); 
 
-
+            // define sleep(ms) function
             const sleep = m => new Promise(r => setTimeout(r, m));
             sails.exiting = false;
 
@@ -34,14 +34,14 @@ module.exports = function (sails) {
                 jbutillib.initJbconnectData();
                 jbutillib.initKue();
 
-                //await sleep(1000);
-                //await Service.Init();
+                await sleep(1000);
+                await Service.Init();
                 //await Job.Init();
                 //await Dataset.Init();
                 //await Track.Init();
 
             
-                console.log("Done initializing jbconnectHook");
+                sails.log.info("Done initializing jbconnectHook");
             });
             
             //return cb();
