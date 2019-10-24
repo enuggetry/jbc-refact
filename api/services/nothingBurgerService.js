@@ -1,3 +1,6 @@
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable indent */
 /* 
  * a test service that can be executed.  when invoked, it will execute, perform some nothingness, and create a track. 
  */
