@@ -24,6 +24,7 @@
  */
 
 module.exports = {
+    schema: false,              // schemaless
 
     attributes: {
         name: {
@@ -119,10 +120,9 @@ module.exports = {
     _sync(cb) {
         sails.log.info('Dataset sync');
 
-        if (! sails.config.globals.jbrowse) return cb('jbrowse section not defined in globals');
-        if (! sails.config.globals.dataSet) return cb('dataSet section not defined in globals');
+        if (! sails.config.jbconnect.dataSet) return cb('dataSet section not defined in globals');
 
-        var g = sails.config.globals.jbrowse;
+        var g = sails.config.jbconnect;
         var thisb = this;
 
         // this will be an assoc array referenced by dataset id and path

@@ -38,6 +38,7 @@ const path = require('path');
 const _ = require('lodash');
 
 module.exports = {
+    schema: false,              // schemaless
 
     attributes: {
         dataset: {
@@ -126,7 +127,7 @@ module.exports = {
     Add: function(addTrack,cb) {
         //console.log(">>>>> TrackAdd",addTrack);
         var thisb = this;
-        var g = sails.config.globals.jbrowse;
+        var g = sails.config.jbconnect;
         if (_.isUndefined(addTrack.dataset)) return cb("dataset not defined");
         var ds = Dataset.Resolve(addTrack.dataset);
         var trackListPath = g.jbrowsePath + ds.path + '/' + 'trackList.json';
@@ -185,48 +186,6 @@ module.exports = {
         });
         
     },
-    // dbAdd: function (addTrack,cb){
-    //     // write to track db
-    //     var data = {
-    //         dataset: ds.id,
-    //         path: ds.path,
-    //         lkey: addTrack.label+"|"+ds.id,
-    //         trackData: addTrack
-    //     };
-
-    //     Track.create(data)
-    //     .then(function(created) {
-    //         sails.log.debug("Track.Add created:",created.id,created.lkey);
-            
-    //         Track.publishCreate(created);       // announce
-    //         Track.ResumeWatch(ds.id);
-            
-    //         return cb(null,created);
-    //     })        
-    //     .catch(function(err) {
-    //         sails.log.error("addTrack track create failed",err);
-    //         Track.ResumeWatch(ds.id);
-    //         return cb(err);
-    //     });
-
-    // },
-    // fAdd: function (addTrack,cb) {
-    //     var g = sails.config.globals.jbrowse;
-    //     var ds = Dataset.Resolve(addTrack.dataset);
-    //     var trackListPath = g.jbrowsePath + ds.path + '/' + 'trackList.json';
-    //     // save track to tracklist json
-    //     try {
-    //         var trackListData = fs.readFileSync (trackListPath);
-    //         var config = JSON.parse(trackListData);
-    //         config.tracks.push(addTrack);
-    //         fs.writeFileSync(trackListPath,JSON.stringify(config,null,4));
-    //     }
-    //     catch(err) {
-    //         sails.log.error("addTrack failed",addTrack.label,err);
-    //         Track.ResumeWatch(ds.id);
-    //         return cb(err);
-    //     }
-    // },
     /*
      * 
      * @param {string} dataset - (eg: "sample_data/json/volvlx")
@@ -235,7 +194,7 @@ module.exports = {
      */
     Modify: function(updateTrack,cb) {
         var thisb = this;
-        var g = sails.config.globals.jbrowse;
+        var g = sails.config.jbconnect;
         var ds = Dataset.Resolve(updateTrack.dataset);
         var trackListPath = g.jbrowsePath + ds.path + '/trackList.json';
 
@@ -297,7 +256,7 @@ module.exports = {
      */
     Remove: function(params,cb) {
         var thisb = this;
-        var g = sails.config.globals.jbrowse;
+        var g = sails.config.jbconnect;
         if (_.isUndefined(params.dataset)) return cb("dataset not defined");
         if (_.isUndefined(params.id)) return cb("id not defined");
         let dataSet = Dataset.Resolve(params.dataset);
@@ -377,10 +336,7 @@ module.exports = {
      */
     
     Sync: function(dataset,cb) {
-        if (! sails.config.globals.jbrowse) return cb('jbrowse section not defined in globals');
-
-        var g = sails.config.globals.jbrowse;
-
+        var g = sails.config.jbconnect;
         let ds = Dataset.Resolve(dataset);
         console.log("Track.sync dataset",ds);
 
@@ -505,7 +461,7 @@ module.exports = {
      */
     /*
     Save(dataSet) {
-        var g = sails.config.globals.jbrowse;
+        var g = sails.config.jbconnect;
         var trackListPath = g.jbrowsePath + dataSet.dataPath + '/' + 'trackList.json';
         //var dataSet = g.dataSet[0].dataPath;
         sails.log.debug('saveTracks('+dataSet+')');
