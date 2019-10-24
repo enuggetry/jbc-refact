@@ -1,3 +1,7 @@
+/* eslint-disable quotes */
+/* eslint-disable curly */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable handle-callback-err */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable indent */
 /**
@@ -84,7 +88,7 @@ module.exports = {
                     var params = {
                         name:   service.name,
                         type:   service.type,
-                        module: 'jblast'
+                        module: 'self'
                     };
                     
                     // istanbul ignore next
