@@ -34,8 +34,8 @@ module.exports.datastores = {
   ***************************************************************************/
 
   default: {
-	adapter: 'sails-disk',
-  dir: 'data/'
+	  adapter: 'sails-disk',
+    dir: 'data/'
 
     /***************************************************************************
     *                                                                          *
@@ -55,6 +55,10 @@ module.exports.datastores = {
     // url: 'mysql://user:password@host:port/database',
 
   },
+  inMemoryDb: {
+    adapter: 'sails-disk',
+    inMemoryOnly: true
+  }
 
 
 };
