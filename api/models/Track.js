@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable indent */
@@ -35,7 +36,6 @@
 //const fs = Promise.promisifyAll(require("fs"));
 const fs = require('fs-extra');
 const path = require('path');
-const _ = require('lodash');
 
 module.exports = {
     schema: false,              // schemaless
@@ -353,7 +353,7 @@ module.exports = {
                   mTracks[modelTracks[i].lkey] = modelTracks[i];
 
                 // read file tracks
-                return fs.readFileAsync(trackListPath);
+                return fs.readFile(trackListPath);
             })
             .then(function(trackListData) {
                 var fileTracks = JSON.parse(trackListData).tracks;
