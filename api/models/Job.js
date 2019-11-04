@@ -87,12 +87,11 @@
  * Ref: `Sails Models and ORM <http://sailsjs.org/documentation/concepts/models-and-orm/models>`_
  */
 
-const async = require('async');
-const _ = require('lodash');
 const fetch = require('node-fetch');
 
 module.exports = {
-    schema:false,   // schemaless
+    schema:false,               // schemaless
+    datastore: 'inMemoryDb',    // this model is not persistent
     
     attributes: {
         id: {

@@ -25,6 +25,7 @@
 
 module.exports = {
     schema: false,              // schemaless
+    datastore: 'inMemoryDb',    // this model is not persistent
 
     attributes: {
         name: {
@@ -103,12 +104,46 @@ module.exports = {
     },
     Init: async function(params) {
         let thisb = this;
+        await this._read(params);
+
+        /*
         let promise = new Promise((resolve, reject) => {
             thisb._sync(params,(err) => {
                 if (err) reject(new Error(err));
                 else resolve();
             });
         });
+        */
+    },
+    /**
+     * read configured datasets from config file.
+     * @param {*} params 
+     */
+    
+    _read: async function(params) {
+        sails.log.info('Dataset sync');
+
+        if (! sails.config.jbconnect.dataSet) return (new Error('dataSet section not defined in globals'));
+
+        var g = sails.config.jbconnect;
+
+        // convert to assoc array in confItems
+        for(let i in g.dataSet) {
+            
+            //todo: validate path exists
+
+            let item = {name: i,path: g.dataSet[i].path};
+
+            try {
+                let newItem = await Dataset.create(item).fetch();
+                newItem = _.omit(newItem, ['createdAt', 'updatedAt']);
+                this._dataSets[newItem.path] = newItem;
+                this._dataSets[newItem.id] =   newItem;
+                sails.log.info(">> dataset",newItem);
+            }
+            catch(err) {
+            }
+        }
     },
     /**
      * Sync datasets, defined in globals with database.

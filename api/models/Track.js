@@ -32,13 +32,12 @@
  *   } 
  * 
  */
-
-//const fs = Promise.promisifyAll(require("fs"));
 const fs = require('fs-extra');
 const path = require('path');
 
 module.exports = {
     schema: false,              // schemaless
+    datastore: 'inMemoryDb',    // this model is not persistent
 
     attributes: {
         dataset: {
@@ -61,10 +60,16 @@ module.exports = {
      * 
      * @param {type} params - parameters
      * @param {type} cb - callback function
-     */
-    Init: function(params,cb) {
+     */ 
+    Init: async function(params) {
         //Track.startWatch();
-        return cb();
+        let datasets = await Dataset.find({});
+
+        for(var i in datasets) {
+            this.Sync(datasets[i].id,{});
+        }
+        
+        return;
     },
     /*
      * Start watching trackList.json

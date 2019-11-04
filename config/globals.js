@@ -11,6 +11,8 @@
 
 module.exports.globals = {
 
+  fs: require('fs-extra'),
+
   /****************************************************************************
   *                                                                           *
   * Whether to expose the locally-installed Lodash as a global variable       *

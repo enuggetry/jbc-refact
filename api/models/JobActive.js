@@ -25,7 +25,8 @@
 
 
 module.exports = {
-    schema: false,     // schemaless
+    schema: false,              // schemaless
+    datastore: 'inMemoryDb',    // this model is not persistent
     
     /**
      * initialize starts the job active monitor
