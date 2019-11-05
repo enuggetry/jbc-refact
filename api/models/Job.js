@@ -112,6 +112,9 @@ module.exports = {
      * start the monitor
      */
     Init: async function(params) {
+
+        await this._read();
+        /*
         let thisb = this;
         let promise = new Promise((resolve, reject) => {
             thisb._init(params,(err) => {
@@ -119,6 +122,7 @@ module.exports = {
                 else resolve();
             });
         });
+        */
     },
     _init: function(params,cb) {
         sails.log.info('Job Engine Starting');
@@ -134,7 +138,7 @@ module.exports = {
         setTimeout(function() {
             thisb._syncJobs();
             thisb._jobRunner();
-            JobActive.Init(null,function() {});
+            //JobActive.Init(null,function() {});
         },1000);
         
         cb();
@@ -523,6 +527,34 @@ module.exports = {
      * if the kJob exists but sJob does not, then create the sJob from kJob.
      * If the sJob exists but not kJob, then delete the sJob
      */
+    _read: async function() {
+        let g = sails.config.kue;
+        let thisb = this;
+
+        let promise = new Promise((resolve, reject) => {
+            g.kue.Job.range( 0, 100000, 'asc', function( err, jobs ) {
+                if (err) return reject(new Error(err));
+                else return resolve(jobs);
+            });
+        });
+
+        let kJobs = await promise;
+
+        for(let i in kJobs) {
+            let job = kJobs[i];
+            let job1 = _.pick(job,thisb._pick);
+            job1.state = job.state();
+            job1.priority = job.priority();
+            job1.progress = job.progress();
+            if (job._error) job1.error = job._error;
+
+            let created = await Job.create(job1).fetch();
+
+            sails.log.info('job',created.id,created.data.name);
+        }
+
+    },
+    /*
     _syncJobs: function() {
         var g = sails.config.kue;
         var thisb = this;
@@ -628,4 +660,5 @@ module.exports = {
             }
         );
     }
+    */
 };
