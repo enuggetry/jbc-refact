@@ -531,14 +531,14 @@ module.exports = {
         let g = sails.config.kue;
         let thisb = this;
 
-        let promise = new Promise((resolve, reject) => {
+        let readKJobs = new Promise((resolve, reject) => {
             g.kue.Job.range( 0, 100000, 'asc', function( err, jobs ) {
                 if (err) return reject(new Error(err));
                 else return resolve(jobs);
             });
         });
 
-        let kJobs = await promise;
+        let kJobs = await readKJobs;
 
         for(let i in kJobs) {
             let job = kJobs[i];
@@ -548,8 +548,12 @@ module.exports = {
             job1.progress = job.progress();
             if (job._error) job1.error = job._error;
 
-            let created = await Job.create(job1).fetch();
-
+            try {
+                let created = await Job.create(job1).fetch();
+            }
+            catch(err) {
+                sails.log.error('job create error',job1);
+            }
             sails.log.info('job',created.id,created.data.name);
         }
 
