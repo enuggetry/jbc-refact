@@ -22,8 +22,6 @@
   // or could use some advice, come by https://sailsjs.com/support.
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   
-  "esversion":6,
-
   "env": {
     "node": true
   },
