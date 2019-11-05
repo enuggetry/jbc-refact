@@ -42,8 +42,7 @@ module.exports = {
     attributes: {
         dataset: {
             model: 'dataset',
-            required: true,
-            unique:true
+            required: true
         },
         path: {
             type: 'string',
@@ -66,7 +65,8 @@ module.exports = {
         let datasets = await Dataset.find({});
 
         for(var i in datasets) {
-            this.Sync(datasets[i].id,{});
+            //this.Sync(datasets[i].id,{});
+            await this._read(datasets[i].id);
         }
         
         return;
@@ -333,6 +333,44 @@ module.exports = {
             return false;   // not found
         }
     },
+    _read: async function(dataset) {
+        let g = sails.config.jbconnect;
+        let ds = Dataset.Resolve(dataset);
+        sails.log.info("Track._read dataset",ds);
+
+        let trackListPath = g.jbrowsePath + ds.path + '/' + 'trackList.json';
+        let fTracks = [];
+
+        try {
+            let trackListData = fs.readFileSync(trackListPath);
+        
+            fTracks = JSON.parse(trackListData).tracks;
+        }
+        catch(err) {
+            sails.log.error(err);
+        }
+
+        for(let k in fTracks) {
+
+            let data = {
+                dataset: ds.id,
+                path: ds.path,
+                lkey: fTracks[k].label+'|'+ds.id,
+                trackData: fTracks[k]
+            };
+
+            let newItem = null;
+            try {
+                newItem = await Track.create(data).fetch();
+                if (newItem)
+                    sails.log.info('track',newItem.id,newItem.lkey);
+            }
+            catch(err) {
+                sails.log.error(err)
+            }
+        }
+
+  },
     /**
      * Sync tracklist.json tracks with Track model (promises version)
      * 
