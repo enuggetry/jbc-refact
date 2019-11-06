@@ -236,7 +236,7 @@ module.exports = {
             // istanbul ignore next
             if (true) {
                 sails.log.error("modifyTrack update failed",err);
-                Track.ResumeWatch(dataSet.id);
+                Track.ResumeWatch(ds.id);
                 return cb(err);
             }
         });
@@ -372,13 +372,13 @@ module.exports = {
 
   },
     /**
-     * Sync tracklist.json tracks with Track model (promises version)
+     * Sync tracklist.json tracks with Track model (promises version) - obsolete
      * 
      * @param {string} dataset   ie. ("sample_data/json/volvox")
      * 
      */
     
-    Sync: function(dataset,cb) {
+    _Sync: function(dataset,cb) {
         var g = sails.config.jbconnect;
         let ds = Dataset.Resolve(dataset);
         console.log("Track.sync dataset",ds);
