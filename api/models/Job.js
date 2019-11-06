@@ -550,11 +550,11 @@ module.exports = {
 
             try {
                 let created = await Job.create(job1).fetch();
+                sails.log.info('job',created.id,created.data.name);
             }
             catch(err) {
                 sails.log.error('job create error',job1);
             }
-            sails.log.info('job',created.id,created.data.name);
         }
 
     },
