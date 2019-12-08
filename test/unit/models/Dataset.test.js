@@ -30,19 +30,15 @@ describe('Dataset Model', function() {
     });
   });
   describe('Dataset.Get', function() {
-    it('should check Get function', function (done) {
-      Dataset.Get({id:1},function(err,found){
-        assert.equal(found[0].name,"Volvox","Get item found");
-        done();
-      });
+    it('should check Get function', async function () {
+      let found = await Dataset.Get({id:1});
+      assert.equal(found[0].name,"Volvox","Get item found");
     });
   });
   describe('Dataset.Get', function() {
-    it('should negative Get function', function (done) {
-      Dataset.Get({id:100},function(err,found){
-        assert.equal(err,null,"Get item not found");
-        done();
-      });
+    it('should negative Get function', async function () {
+      let found = await Dataset.Get({id:100});
+      assert.equal(found.length,0,"Get item not found");
     });
   });
   describe('Dataset.Resolve', function() {

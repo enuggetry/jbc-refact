@@ -62,12 +62,9 @@ module.exports = {
      * @param {object} params - search critera (i.e. ``{id: 1,user:'jimmy'}`` )
      * @param {function} cb - callback ``function(err,array)``
      */
-    Get(params,cb) {
-        this.find(params).then(function(foundList) {
-           return cb(null,foundList) 
-        }).catch(function(err){
-           return cb(err);
-        });
+    async Get(params) {
+        let foundItems = await this.find(params);
+        return foundItems;
     },
     /**
      * Given either a dataset string (ie. "sample_data/json/volvox" or the database id of a dataset,

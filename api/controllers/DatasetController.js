@@ -34,14 +34,16 @@ module.exports = {
 
         /* istanbul ignore else */
         if (req.method === 'GET') {
-            Dataset.Get(params,function(err,records) {
-                /* istanbul ignore next */
-                if (err) return res.serverError(err);
-                /* istanbul ignore next */
-                if (records.length===0) return res.notFound();
-                
-                return res.ok(records);
-            });
+            (async() => {
+                try {
+                    let foundItems = await Dataset.Get(params);
+                    if (foundItems.length===0) return res.notFound();
+                    return res.ok(foundItems);
+                }
+                catch (err) {
+                    return res.serverError({err:err});
+                }
+            })();
         } 
         else 
             return res.forbidden('requires POST');
