@@ -216,7 +216,7 @@ module.exports = {
 
                         Track.Sync(data.path);
 
-                        Dataset.publishCreate(newDataset);
+                        Dataset.publish([data.id],'add',newDataset);
                         
                         return cb1();
                     });
@@ -258,7 +258,7 @@ module.exports = {
                             }
                             sails.log("Dataset.destroy",item.id);
                             // notify listeners
-                            Dataset.publishDestroy(item.id);   // announce
+                            Dataset.publish([item.id],'delete',item);   // announce
                             return cb();
                         });
                     }

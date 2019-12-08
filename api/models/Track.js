@@ -164,7 +164,7 @@ module.exports = {
             // announce track
             let announceTrack = _.cloneDeep(createdTrack);
             announceTrack.datasetPath = ds.path;
-            Track.publish(_.pluck(createdTrack.id), announceTrack);
+            Track.publish([createdTrack.id],'add', announceTrack);
 
             Track.ResumeWatch(ds.id);
             return createdTrack;
@@ -205,7 +205,7 @@ module.exports = {
           
           let updatedTrack = await Track.update({lkey:lkey},{trackData:updateTrack}).fetch();
           
-          Track.publish(0,updatedTrack[0]);       // announce
+          Track.publish([ds.id],'modify',updatedTrack[0]);       // announce
           Track.ResumeWatch(ds.id);
           return updatedTrack;
         }
@@ -264,8 +264,8 @@ module.exports = {
               console.log("track removed from file",label,trackListPath);
             }
 
-            await Track.destroy(id)
-            Track.publish(id);              // announce
+            let deletedTrack = await Track.destroy(id).fetch();
+            Track.publish([id],'delete',deletedTrack);              // announce
             Track.ResumeWatch(dataSet.id);
             return id;
         }
