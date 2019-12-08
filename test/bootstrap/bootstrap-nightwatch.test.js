@@ -1,3 +1,8 @@
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable handle-callback-err */
+/* eslint-disable no-unused-vars */
+/* eslint-disable indent */
+/* eslint-disable prefer-arrow-callback */
 /*
  * sails bootstrap for mocha
  * 
