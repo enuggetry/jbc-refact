@@ -9,6 +9,10 @@ const expect = chai.expect;
 const assert = chai.assert;
 
 describe('JobActive Model', function() {
+  it('init agent', function() {
+    // this preserves session data for subsequent calls
+    agent = chai.request.agent(server);
+  });
 
   describe('JobActive.find()', function() {
     it('should check find function', function (done) {
@@ -38,6 +42,7 @@ describe('JobActive Model', function() {
       });
 });
 
+/*
   describe('User.Get()', function() {
     it('should check Get function', function (done) {
       User.Get({username:'juser'},function(err,found) {
@@ -46,5 +51,5 @@ describe('JobActive Model', function() {
       })
     });
   });
-
+*/
 });

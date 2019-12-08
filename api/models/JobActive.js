@@ -35,9 +35,11 @@ module.exports = {
      * @param {type} cb - callback ``function cb(err)`` 
      *    
      */
-    Init: function(params,cb) {
-        this._activeMonitor();
-        cb();
+    Init: function(params) {
+        return new Promise((resolve,reject) => {
+            this._activeMonitor();
+            resolve();
+        });
     },
     /**
      * Get list of tracks based on critera in params  
@@ -46,12 +48,9 @@ module.exports = {
      * @param {function} cb - callback ``function(err,array)``
      * 
      */
-    Get: function(params,cb) {
-        this.find(params).then(function(foundList) {
-           return cb(null,foundList); 
-        }).catch( /* istanbul ignore next */ function(err){
-           return cb(err);
-        });
+    Get: async function(params) {
+        let foundItems = await this.find(params);
+        return foundItems;
     },
     /*
      * Monitors how many active jobs there are.
@@ -91,7 +90,7 @@ module.exports = {
         function writeActive(val) {
             JobActive.updateOrCreate({id:1},{active:val}).then(function(record) {
                 //sails.log('active written',record);
-                JobActive.publish(1,record);    //todo: 
+                JobActive.publish([1],'update',record);    //todo: 
             })
             .catch(
             /* istanbul ignore next */

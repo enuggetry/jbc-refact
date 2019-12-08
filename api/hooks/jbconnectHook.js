@@ -34,11 +34,12 @@ module.exports = function (sails) {
                 jbutillib.initJbconnectData();
                 jbutillib.initKue();
 
-                await sleep(1000);
-                await Service.Init();
-                await Job.Init();
+                //await sleep(1000);
                 await Dataset.Init();
                 await Track.Init();
+                await Service.Init();
+                await Job.Init();
+                await JobActive.Init();
 
             
                 sails.log.info("Done initializing jbconnectHook");
