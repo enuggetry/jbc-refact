@@ -112,13 +112,9 @@ module.exports = {
      * @param {function} cb - callback ``function(err,array)``
      * 
      */
-    Get(params,cb) {
-        this.find(params).then(function(foundList) {
-           cb(null,foundList) 
-        }).catch(function(err){
-            // istanbul ignore next
-            cb(err);
-        });
+    async Get(params) {
+        let foundList = await this.find(params);
+        return foundList;
     },
     /*
      * Add a track. into trackList.json and db.
