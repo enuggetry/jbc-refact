@@ -43,13 +43,18 @@ module.exports = {
         var params = req.allParams();
         // istanbul ignore else
         if (req.method === 'GET') {
-            Service.Get(params,function(err,records) {
-                // istanbul ignore if
-                if (err) return res.serverError(err);
-                // istanbul ignore if
-                if (records.length===0) return res.notFound();
-                return res.ok(records);
-            });
+
+
+            (async() => {
+                try {
+                    let foundItems = await Service.Get(params);
+                    if (foundItems.length===0) return res.notFound();
+                    return res.ok(foundItems);
+                }
+                catch (err) {
+                    return res.serverError({err:err});
+                }
+            })();
         } 
         else 
             return res.forbidden('requires POST');

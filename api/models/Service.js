@@ -53,8 +53,8 @@ module.exports = {
       }
     },
 
-    Init: async function(params) {
-        let promise = new Promise((resolve, reject) => {
+    Init: function(params) {
+        return new Promise((resolve, reject) => {
             serviceProc.init(params,(err) => {
                 if (err) reject(new Error(err));
                 else resolve();
@@ -69,12 +69,9 @@ module.exports = {
      * @param {function} cb - callback ``function(err,array)``
      *
      */
-    Get: function(params,cb) {
-        this.find(params).then(function(foundList) {
-           return cb(null,foundList) 
-        }).catch(function(err){
-           return cb(err);
-        });
+    Get: async function(params) {
+        let foundList = await this.find(params);
+        return foundList;
     },
     /**
      * add service
