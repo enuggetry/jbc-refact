@@ -91,16 +91,29 @@ module.exports = {
 
         /* istanbul ignore else */
         if (req.method === 'POST') {
-            /* istanbul ignore if */
+            /* istanbul ignore if */ 
             if (_.isUndefined(track.dataset)) 
                 return res.serverError({err:"dataset property not defined",track:track});
 
-            Track.Add(track,function(err,created) {
-                //console.log('created',created);
-                /* istanbul ignore next */
-                if (err) return res.serverError({err:err,track:track});
-                return res.ok(created);
-            });
+            let created = false;
+
+            (async() => {
+                try {
+                    created = await Track.Add(track);
+                    return res.ok(created);
+                }
+                catch (err) {
+                    return res.serverError({err:err,track:track});
+                }
+            })();
+                  
+                
+            // Track.Add(track,function(err,created) {
+            //     //console.log('created',created);
+            //     /* istanbul ignore next */
+            //     if (err) return res.serverError({err:err,track:track});
+            //     return res.ok(created);
+            // });
         } 
         else
             return res.forbidden('requires POST');
@@ -142,11 +155,19 @@ module.exports = {
         var track = params;
         // istanbul ignore else
         if (req.method === 'POST') {
-            Track.Modify(track,function(err,modified) {
-                // istanbul ignore if
-                if (err) return res.serverError({err:err,track:track});
-                return res.ok(modified);
-            });
+
+            (async() => {
+                let modifiedTrack = false;
+
+                try {
+                    modifiedTrack = await Track.Modify(track);
+                    return res.ok(modifiedTrack);
+                }
+                catch (err) {
+                    return res.serverError({err:err,track:track});
+                }
+            })();
+
         } 
         else 
             return res.forbidden('requires POST');
@@ -169,17 +190,21 @@ module.exports = {
      */
     remove: function(req,res) {
         let params = req.allParams();
-        //let id = params.id;
-        //let dataset = Dataset.Resolve(params.dataset);
-        //let label = params.label;
 
-        /* istanbul ignore else */
+        // istanbul ignore else
         if (req.method === 'POST') {
-            Track.Remove(params,function(err) {
-                /* istanbul ignore next */
-                if (err) return res.serverError({err:err});
-                return res.ok();
-            });
+
+            (async() => {
+                let removedTrack = false;
+
+                try {
+                    await Track.Remove(params);
+                    return res.ok();
+                }
+                catch (err) {
+                    return res.serverError({err:err});
+                }
+            })();
         } 
         else 
             return res.forbidden('requires POST');

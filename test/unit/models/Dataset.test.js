@@ -1,3 +1,8 @@
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable handle-callback-err */
+/* eslint-disable no-unused-vars */
+/* eslint-disable indent */
+/* eslint-disable prefer-arrow-callback */
 const _ = require("lodash");
 const tlib = require('../../share/test-lib');
 const chai = require('chai')
@@ -10,6 +15,10 @@ const assert = chai.assert;
 
 describe('Dataset Model', function() {
 
+  it('init agent', function() {
+    // this preserves session data for subsequent calls
+    agent = chai.request.agent(server);
+  });
   describe('Dataset.find()', function() {
     it('should check find function', function (done) {
       Dataset.find()
