@@ -1,3 +1,8 @@
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable handle-callback-err */
+/* eslint-disable no-unused-vars */
+/* eslint-disable indent */
+/* eslint-disable prefer-arrow-callback */
 /*
  * sails bootstrap for mocha
  * 
@@ -10,10 +15,10 @@ const shell = require('shelljs');
 const _ = require("lodash");
 const async = require("async");
 
-before(function(done) {
+before((done) => {
     console.log("Lifting SAILS...");
 
-    this.timeout(60000);
+    //this.timeout(60000);
 
     //shell.exec('./jbutil --force --dbreset');
 
@@ -63,58 +68,89 @@ before(function(done) {
 
         // here you can load fixtures, etc.
         setTimeout(function() {
-            console.log(">>>post timeout",typeof done);
 
-            Track.find({}).then(function(records) {
-                //console.log('xxxbootstrap records',records)
-                if (err) {
-                    console.log("bootstrap failed to get tracks",err);
-                    return done();
-                }
-                if (_.isUndefined(records)) {
-                    sails.log.error("Track.Get undefined records");
-                    return done();
-                }
-                if (records.length > 0) {
-                    
-                    let deleteRecs = [];
-                    for(var i in records ) {
-                        if ( !_.isUndefined(records[i].trackData.category) && records[i].trackData.category==='JBConnectTest' ) {
-                            deleteRecs.push(records[i]);
-                        }
-                        if ( !_.isUndefined(records[i].trackData.testtrack) && records[i].trackData.testtrack===true ) {
-                            deleteRecs.push(records[i]);
-                        }
+            (async() => {
+                try {
+
+                    let records = await Track.find({});
+
+                    if (_.isUndefined(records)) {
+                        return done("Error: records undefined");
                     }
-                    if (deleteRecs.length) {
-                        sails.log.info("Removing test tracks with category test tracks");
-                    
-                        async.eachLimit(deleteRecs,1,
-                            function(rec,cb){
-                                console.log("remove rec",rec);
-                                
-                                Track.Remove(rec,function(err,id) {
-                                    if (err) {
-                                        sails.log.error("failed to remove",err);
-                                        return cb(err);
-                                    }
-                                    sails.log.info("removed",rec.lkey);
-                                    return cb();
-                                });
-                                
-                                //return cb();
-                            },
-                            function(err){
-                                // all done
-                                done();
+
+                    if (records.length > 0) {
+                        let deleteRecs = [];
+                        for(var i in records ) {
+                            let del = false;
+                            if ( !_.isUndefined(records[i].trackData.category) && records[i].trackData.category==='JBConnectTest' )
+                                del = true;
+                            if ( !_.isUndefined(records[i].trackData.testtrack) && records[i].trackData.testtrack===true )
+                                del = true;
+                            if (del) {
+                                await Track.Remove(records[i]);
+                                console.info("bootstrap removed test track: "+records[i].lkey)
                             }
-                        );
+                        }
+                        return done();
                     }
-                    else done();
+                    else
+                        return done("Error: no tracks in trackList.json");
                 }
-                else 
-                    done();
-            });
+                catch (err) {
+                    return done(err);
+                }
+            })();
+
+            // Track.find({}).then(function(records) {
+            //     //console.log('xxxbootstrap records',records)
+            //     if (err) {
+            //         console.log("bootstrap failed to get tracks",err);
+            //         return done();
+            //     }
+            //     if (_.isUndefined(records)) {
+            //         sails.log.error("Track.Get undefined records");
+            //         return done();
+            //     }
+            //     if (records.length > 0) {
+                    
+            //         let deleteRecs = [];
+            //         for(var i in records ) {
+            //             if ( !_.isUndefined(records[i].trackData.category) && records[i].trackData.category==='JBConnectTest' ) {
+            //                 deleteRecs.push(records[i]);
+            //             }
+            //             if ( !_.isUndefined(records[i].trackData.testtrack) && records[i].trackData.testtrack===true ) {
+            //                 deleteRecs.push(records[i]);
+            //             }
+            //         }
+            //         if (deleteRecs.length) {
+            //             sails.log.info("Removing test tracks with category test tracks");
+                    
+            //             async.eachLimit(deleteRecs,1,
+            //                 function(rec,cb){
+            //                     console.log("remove rec",rec);
+                                
+            //                     Track.Remove(rec,function(err,id) {
+            //                         if (err) {
+            //                             sails.log.error("failed to remove",err);
+            //                             return cb(err);
+            //                         }
+            //                         sails.log.info("removed",rec.lkey);
+            //                         return cb();
+            //                     });
+                                
+            //                     //return cb();
+            //                 },
+            //                 function(err){
+            //                     // all done
+            //                     done();
+            //                 }
+            //             );
+            //         }
+            //         else done();
+            //     }
+            //     else 
+            //         done();
+            // });
         },2000);
     });
 });
