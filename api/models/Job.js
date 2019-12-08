@@ -124,7 +124,7 @@ module.exports = {
         });
         */
     },
-    _init: function(params,cb) {
+    _init: async function(params) {
         sails.log.info('Job Engine Starting');
 
         var g = sails.config.jbconnect;
@@ -140,8 +140,6 @@ module.exports = {
             thisb._jobRunner();
             //JobActive.Init(null,function() {});
         },1000);
-        
-        cb();
     },
     /**
      * Get list of tracks based on critera in params
@@ -150,13 +148,9 @@ module.exports = {
      * @param {function} cb - callback function(err,array)
      * 
      */
-    Get: function(params,cb) {
-        this.find(params).then(function(foundList) {
-           return cb(null,foundList); 
-        }).catch(function(err){
-            // istanbul ignore next
-            return cb(err);
-        });
+    Get: async function(params) {
+        let foundItems = await this.find(params);
+        return foundItems;
     },
     /**
      * 

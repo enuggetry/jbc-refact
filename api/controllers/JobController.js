@@ -94,13 +94,16 @@ module.exports = {
         sails.log("/job/get",params);
         // istanbul ignore else
         if (req.method === 'GET') {
-            Job.Get(params,function(err,records) {
-                // istanbul ignore if
-                if (err) return res.serverError(err);
-                // istanbul ignore if
-                if (records.length===0) return res.notFound();
-                return res.ok(records);
-            });
+            (async() => {
+                try {
+                    let foundItems = await Job.Get(params);
+                    if (foundItems.length===0) return res.notFound();
+                    return res.ok(foundItems);
+                }
+                catch (err) {
+                    return res.serverError({err:err});
+                }
+            })();
         } 
         else 
             return res.forbidden('requires POST');
