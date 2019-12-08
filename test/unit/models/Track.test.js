@@ -216,7 +216,7 @@ describe('Track Model', function() {
     });
   });
 
-/*
+
   describe('test /track/remove & Track.Remove', function() {
     it('should call /track/remove', function(done) {
           
@@ -256,12 +256,12 @@ describe('Track Model', function() {
 
     });
   });
-*/
-/*
+
+
   describe('test /track/modify & Track.Modify', function() {
     it('should call /track/modify', function(done) {
           
-      let dataset = Dataset.Resolve(1);
+      //let dataset = Dataset.Resolve(1);
       let ds = Dataset.Resolve(1);
 
       let teststr1 = "best modified ho";
@@ -306,7 +306,10 @@ describe('Track Model', function() {
         });
     });
   });
-*/
+
+/***************************************************************
+ * Utility function
+ */
 
   function read_db_and_f(ds,done) {
     console.log('read_db_and_f');

@@ -196,24 +196,27 @@ module.exports = {
         
         // save track to tracklist json
         try {
-          let trackListData = fs.readFileSync (trackListPath);
+          let trackListData = fs.readFileSync (trackListPath,'utf-8');
           let config = JSON.parse(trackListData);
           _modifyTrack(config.tracks,updateTrack);
           fs.writeFileSync(trackListPath,JSON.stringify(config,null,4));
 
           let lkey = updateTrack.label+"|"+ds.id;
           
-          let updatedTrack = await Track.update({lkey:lkey},{trackData:updateTrack})
-          Track.publishUpdate(0,updatedTrack[0]);       // announce
+          let updatedTrack = await Track.update({lkey:lkey},{trackData:updateTrack}).fetch();
+          
+          Track.publish(0,updatedTrack[0]);       // announce
           Track.ResumeWatch(ds.id);
           return updatedTrack;
         }
         catch(err) {
             // istanbul ignore next
             if (true) {
-                sails.log.error("modifyTrack failed",updateTrack.label,err);
+                //sails.log.error("modifyTrack failed",updatedTrack.label,err);
                 Track.ResumeWatch(ds.id);
-                return Promise.reject(new Error("modifyTrack failed - "+updateTrack.label));
+                if (!err.raw)
+                    return Promise.reject(err);
+                return Promise.reject(err.raw);
             }
         }
 
