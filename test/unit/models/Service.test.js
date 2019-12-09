@@ -9,7 +9,7 @@ const expect = chai.expect;
 const assert = chai.assert;
 
 
-describe('ServiceModel', function() {
+describe('ServiceModel model testingk...', function() {
     /*
     describe('#basic', function() {
         it('should check that find function returns no services', () => {
@@ -33,15 +33,19 @@ describe('ServiceModel', function() {
                 handler: testWorkflowSvc                    
             };
 
-            serviceProc.addService(service, (err) => {
-                assert.isUndefined(err);
-                Service.find({name:'test_workflow'})
-                    .then( (foundServices) => {
-                        assert.equal(foundServices.length,1)
-                        console.log(foundServices)
-                    })
-                    .then(done,done)
-            })
+            (async() => {
+                try {
+                    let ret = await Service.Add(service);
+
+                    let foundServices = await Service.find({name:'test_workflow'});
+                    assert.equal(foundServices.length,1)
+                    console.log(foundServices)
+                    done();
+                }
+                catch (err) {
+                    done(err);
+                }
+            })();
         });
     });
     it('should call rest /service/get', function(done) {

@@ -105,7 +105,7 @@ module.exports = {
                         sails.log.error('Service',service.name,'not found');
                         return cb1();
                     }
-                    thisb.addService(params,cb1);
+                    thisb._addService(params,cb1);
 
                 }, function completedAddingServices(err) {
                     // istanbul ignore next
@@ -155,13 +155,32 @@ module.exports = {
         });
     },
     /**
+     * add a service (promise)
+     * returns 0 if successful
+     * 
+     * @param {object} service - service
+     * 
+     */
+    addService: function(service) {
+        let thisb = this;
+        return new Promise((resolve,reject) => {
+            thisb._addService(service,function(ret) {
+                if (!ret) resolve(0);       // success
+                else reject(ret);           // fail
+            });
+
+        });
+
+    },
+    /*
      * add a service
+     * returns 0 if successful
      * 
      * @param {object} service - service
      * @param {function} cb - callback
      * 
      */
-    addService: function(service,cb) {
+    _addService: function(service,cb) {
         
         var handler = service.handler;
         var cb2 = cb;

@@ -74,7 +74,7 @@ module.exports = {
         return foundList;
     },
     /**
-     * add service
+     * add service (promise)
      *
      * @param {object} service
      * ::
@@ -85,8 +85,6 @@ module.exports = {
      *      alias: optional
      *      handler: - a function pointer to the service handler
      *  }
-     *
-     * @param {object} cb - callback function
      *
      */
     Add: serviceProc.addService,

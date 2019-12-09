@@ -8,8 +8,8 @@ const server = 'http://localhost:1337';
 const expect = chai.expect;
 const assert = chai.assert;
 
-describe('JobActive Model', function() {
-  it('init agent', function() {
+describe('JobActive Model testing...', function() {
+  it('JobActive init agent', function() {
     // this preserves session data for subsequent calls
     agent = chai.request.agent(server);
   });

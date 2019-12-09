@@ -131,16 +131,29 @@ module.exports = {
      */
     submit: function(req,res) {
         var params = req.allParams();
+
         // istanbul ignore else
         if (req.method === 'POST') {
-            Job.Submit(params,function(err,result) {
-                // istanbul ignore if
-                if (err) res.serverError(err);
-                return res.ok(result);
-            });
+            (async() => {
+                try {
+                    await Job.Submit(params);
+                    return res.ok();
+                }
+                catch (err) {
+                    return res.serverError({err:err});
+                }
+            })();
         } 
         else 
             return res.forbidden('requires POST');
+
+
+
+            // Job.Submit(params,function(err,result) {
+            //     // istanbul ignore if
+            //     if (err) res.serverError(err);
+            //     return res.ok(result);
+            // });
     }
 	
 };

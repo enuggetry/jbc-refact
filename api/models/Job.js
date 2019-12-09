@@ -185,7 +185,16 @@ module.exports = {
      * @param {function} cb - ``function(err,returndata)``
      * 
      */
-    Submit: function(params,cb) {
+    Submit: function(params) {
+        let thisb = this;
+        return new Promise((resolve,reject) => {
+            thisb._submit(params,(err,data) => {
+                if (!err) return resolve(data);
+                else return reject(err);
+            });
+        });
+    },
+    _submit: function(params,cb) {
         
         //sails.log('Job.Submit',params);
         
